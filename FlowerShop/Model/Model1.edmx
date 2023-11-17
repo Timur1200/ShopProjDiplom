@@ -1,0 +1,531 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Хранилище FlowerShopModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AdminOrder">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="datetime" />
+          <Property Name="Sum" Type="float" />
+        </EntityType>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Fio" Type="nvarchar" MaxLength="100" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ClientOrder">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClientId" Type="int" />
+          <Property Name="Date" Type="datetime" />
+          <Property Name="Sum" Type="float" />
+          <Property Name="Address" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="Status" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Flower">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProviderId" Type="int" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Price" Type="float" />
+          <Property Name="Count" Type="int" />
+          <Property Name="Markup" Type="float" />
+          <Property Name="Img" Type="image" />
+        </EntityType>
+        <EntityType Name="ListAdminOrder">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AdminOrderId" Type="int" />
+          <Property Name="FlowerId" Type="int" />
+          <Property Name="Count" Type="int" />
+          <Property Name="Sum" Type="float" />
+        </EntityType>
+        <EntityType Name="ListClientOrder">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClientOrderId" Type="int" />
+          <Property Name="FlowerId" Type="int" />
+          <Property Name="Count" Type="int" />
+          <Property Name="Sum" Type="float" />
+        </EntityType>
+        <EntityType Name="Provider">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <Association Name="FK_ClientOrder_Client">
+          <End Role="Client" Type="Self.Client" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ClientOrder" Type="Self.ClientOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ClientOrder">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Flower_Provider">
+          <End Role="Provider" Type="Self.Provider" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Flower" Type="Self.Flower" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Provider">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Flower">
+              <PropertyRef Name="ProviderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ListAdminOrder_AdminOrder">
+          <End Role="AdminOrder" Type="Self.AdminOrder" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ListAdminOrder" Type="Self.ListAdminOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AdminOrder">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ListAdminOrder">
+              <PropertyRef Name="AdminOrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ListAdminOrder_Flower">
+          <End Role="Flower" Type="Self.Flower" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ListAdminOrder" Type="Self.ListAdminOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Flower">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ListAdminOrder">
+              <PropertyRef Name="FlowerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ListClientOrder_ClientOrder">
+          <End Role="ClientOrder" Type="Self.ClientOrder" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ListClientOrder" Type="Self.ListClientOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientOrder">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ListClientOrder">
+              <PropertyRef Name="ClientOrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ListClientOrder_Flower">
+          <End Role="Flower" Type="Self.Flower" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ListClientOrder" Type="Self.ListClientOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Flower">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ListClientOrder">
+              <PropertyRef Name="FlowerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище FlowerShopModelContainer">
+          <EntitySet Name="AdminOrder" EntityType="Self.AdminOrder" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ClientOrder" EntityType="Self.ClientOrder" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Flower" EntityType="Self.Flower" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ListAdminOrder" EntityType="Self.ListAdminOrder" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ListClientOrder" EntityType="Self.ListClientOrder" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Provider" EntityType="Self.Provider" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_ClientOrder_Client" Association="Self.FK_ClientOrder_Client">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="ClientOrder" EntitySet="ClientOrder" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Flower_Provider" Association="Self.FK_Flower_Provider">
+            <End Role="Provider" EntitySet="Provider" />
+            <End Role="Flower" EntitySet="Flower" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ListAdminOrder_AdminOrder" Association="Self.FK_ListAdminOrder_AdminOrder">
+            <End Role="AdminOrder" EntitySet="AdminOrder" />
+            <End Role="ListAdminOrder" EntitySet="ListAdminOrder" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ListAdminOrder_Flower" Association="Self.FK_ListAdminOrder_Flower">
+            <End Role="Flower" EntitySet="Flower" />
+            <End Role="ListAdminOrder" EntitySet="ListAdminOrder" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ListClientOrder_ClientOrder" Association="Self.FK_ListClientOrder_ClientOrder">
+            <End Role="ClientOrder" EntitySet="ClientOrder" />
+            <End Role="ListClientOrder" EntitySet="ListClientOrder" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ListClientOrder_Flower" Association="Self.FK_ListClientOrder_Flower">
+            <End Role="Flower" EntitySet="Flower" />
+            <End Role="ListClientOrder" EntitySet="ListClientOrder" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FlowerShopModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AdminOrder">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="Sum" Type="Int32" />
+          <NavigationProperty Name="ListAdminOrder" Relationship="Self.FK_ListAdminOrder_AdminOrder" FromRole="AdminOrder" ToRole="ListAdminOrder" />
+        </EntityType>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Fio" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ClientOrder" Relationship="FlowerShopModel.FK_ClientOrder_Client" FromRole="Client" ToRole="ClientOrder" />
+        </EntityType>
+        <EntityType Name="ListAdminOrder">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AdminOrderId" Type="Int32" />
+          <Property Name="FlowerId" Type="Int32" />
+          <Property Name="Count" Type="Int32" />
+          <Property Name="Sum" Type="Int32" />
+          <NavigationProperty Name="AdminOrder" Relationship="Self.FK_ListAdminOrder_AdminOrder" FromRole="ListAdminOrder" ToRole="AdminOrder" />
+          <NavigationProperty Name="Flower" Relationship="FlowerShopModel.FK_ListAdminOrder_Flower" FromRole="ListAdminOrder" ToRole="Flower" />
+        </EntityType>
+        <EntityType Name="Provider">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Flower" Relationship="FlowerShopModel.FK_Flower_Provider" FromRole="Provider" ToRole="Flower" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_ListAdminOrder_AdminOrder">
+          <End Role="AdminOrder" Type="Self.AdminOrder" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ListAdminOrder" Type="Self.ListAdminOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AdminOrder">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ListAdminOrder">
+              <PropertyRef Name="AdminOrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FlowerShopEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AdminOrder" EntityType="Self.AdminOrder" />
+          <EntitySet Name="Client" EntityType="Self.Client" />
+          <EntitySet Name="ListAdminOrder" EntityType="Self.ListAdminOrder" />
+          <EntitySet Name="Provider" EntityType="Self.Provider" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <AssociationSet Name="FK_ListAdminOrder_AdminOrder" Association="Self.FK_ListAdminOrder_AdminOrder">
+            <End Role="AdminOrder" EntitySet="AdminOrder" />
+            <End Role="ListAdminOrder" EntitySet="ListAdminOrder" />
+          </AssociationSet>
+          <EntitySet Name="Flower" EntityType="FlowerShopModel.Flower" />
+          <AssociationSet Name="FK_Flower_Provider" Association="FlowerShopModel.FK_Flower_Provider">
+            <End Role="Provider" EntitySet="Provider" />
+            <End Role="Flower" EntitySet="Flower" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ListAdminOrder_Flower" Association="FlowerShopModel.FK_ListAdminOrder_Flower">
+            <End Role="Flower" EntitySet="Flower" />
+            <End Role="ListAdminOrder" EntitySet="ListAdminOrder" />
+          </AssociationSet>
+          <EntitySet Name="ClientOrder" EntityType="FlowerShopModel.ClientOrder" />
+          <AssociationSet Name="FK_ClientOrder_Client" Association="FlowerShopModel.FK_ClientOrder_Client">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="ClientOrder" EntitySet="ClientOrder" />
+          </AssociationSet>
+          <EntitySet Name="ListClientOrder" EntityType="FlowerShopModel.ListClientOrder" />
+          <AssociationSet Name="FK_ListClientOrder_ClientOrder" Association="FlowerShopModel.FK_ListClientOrder_ClientOrder">
+            <End Role="ClientOrder" EntitySet="ClientOrder" />
+            <End Role="ListClientOrder" EntitySet="ListClientOrder" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ListClientOrder_Flower" Association="FlowerShopModel.FK_ListClientOrder_Flower">
+            <End Role="Flower" EntitySet="Flower" />
+            <End Role="ListClientOrder" EntitySet="ListClientOrder" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="Flower">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProviderId" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Double" />
+          <Property Name="Count" Type="Int32" />
+          <Property Name="Markup" Type="Double" />
+          <Property Name="Img" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="Provider" Relationship="FlowerShopModel.FK_Flower_Provider" FromRole="Flower" ToRole="Provider" />
+          <NavigationProperty Name="ListAdminOrder" Relationship="FlowerShopModel.FK_ListAdminOrder_Flower" FromRole="Flower" ToRole="ListAdminOrder" />
+          <NavigationProperty Name="ListClientOrder" Relationship="FlowerShopModel.FK_ListClientOrder_Flower" FromRole="Flower" ToRole="ListClientOrder" />
+        </EntityType>
+        <Association Name="FK_Flower_Provider">
+          <End Type="FlowerShopModel.Provider" Role="Provider" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="FlowerShopModel.Flower" Role="Flower" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Provider">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Flower">
+              <PropertyRef Name="ProviderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ListAdminOrder_Flower">
+          <End Type="FlowerShopModel.Flower" Role="Flower" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="FlowerShopModel.ListAdminOrder" Role="ListAdminOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Flower">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ListAdminOrder">
+              <PropertyRef Name="FlowerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ClientOrder">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClientId" Type="Int32" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="Sum" Type="Double" />
+          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Client" Relationship="FlowerShopModel.FK_ClientOrder_Client" FromRole="ClientOrder" ToRole="Client" />
+          <NavigationProperty Name="ListClientOrder" Relationship="FlowerShopModel.FK_ListClientOrder_ClientOrder" FromRole="ClientOrder" ToRole="ListClientOrder" />
+        </EntityType>
+        <Association Name="FK_ClientOrder_Client">
+          <End Type="FlowerShopModel.Client" Role="Client" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="FlowerShopModel.ClientOrder" Role="ClientOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ClientOrder">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ListClientOrder">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClientOrderId" Type="Int32" />
+          <Property Name="FlowerId" Type="Int32" />
+          <Property Name="Count" Type="Int32" />
+          <Property Name="Sum" Type="Double" />
+          <NavigationProperty Name="ClientOrder" Relationship="FlowerShopModel.FK_ListClientOrder_ClientOrder" FromRole="ListClientOrder" ToRole="ClientOrder" />
+          <NavigationProperty Name="Flower" Relationship="FlowerShopModel.FK_ListClientOrder_Flower" FromRole="ListClientOrder" ToRole="Flower" />
+        </EntityType>
+        <Association Name="FK_ListClientOrder_ClientOrder">
+          <End Type="FlowerShopModel.ClientOrder" Role="ClientOrder" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="FlowerShopModel.ListClientOrder" Role="ListClientOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientOrder">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ListClientOrder">
+              <PropertyRef Name="ClientOrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ListClientOrder_Flower">
+          <End Type="FlowerShopModel.Flower" Role="Flower" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="FlowerShopModel.ListClientOrder" Role="ListClientOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Flower">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ListClientOrder">
+              <PropertyRef Name="FlowerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище FlowerShopModelContainer" CdmEntityContainer="FlowerShopEntities">
+          <EntitySetMapping Name="AdminOrder">
+            <EntityTypeMapping TypeName="FlowerShopModel.AdminOrder">
+              <MappingFragment StoreEntitySet="AdminOrder">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Sum" ColumnName="Sum" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Client">
+            <EntityTypeMapping TypeName="FlowerShopModel.Client">
+              <MappingFragment StoreEntitySet="Client">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Fio" ColumnName="Fio" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ListAdminOrder">
+            <EntityTypeMapping TypeName="FlowerShopModel.ListAdminOrder">
+              <MappingFragment StoreEntitySet="ListAdminOrder">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="AdminOrderId" ColumnName="AdminOrderId" />
+                <ScalarProperty Name="FlowerId" ColumnName="FlowerId" />
+                <ScalarProperty Name="Count" ColumnName="Count" />
+                <ScalarProperty Name="Sum" ColumnName="Sum" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Provider">
+            <EntityTypeMapping TypeName="FlowerShopModel.Provider">
+              <MappingFragment StoreEntitySet="Provider">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="FlowerShopModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Flower">
+            <EntityTypeMapping TypeName="FlowerShopModel.Flower">
+              <MappingFragment StoreEntitySet="Flower">
+                <ScalarProperty Name="Img" ColumnName="Img" />
+                <ScalarProperty Name="Markup" ColumnName="Markup" />
+                <ScalarProperty Name="Count" ColumnName="Count" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ProviderId" ColumnName="ProviderId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ClientOrder">
+            <EntityTypeMapping TypeName="FlowerShopModel.ClientOrder">
+              <MappingFragment StoreEntitySet="ClientOrder">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Sum" ColumnName="Sum" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ListClientOrder">
+            <EntityTypeMapping TypeName="FlowerShopModel.ListClientOrder">
+              <MappingFragment StoreEntitySet="ListClientOrder">
+                <ScalarProperty Name="Sum" ColumnName="Sum" />
+                <ScalarProperty Name="Count" ColumnName="Count" />
+                <ScalarProperty Name="FlowerId" ColumnName="FlowerId" />
+                <ScalarProperty Name="ClientOrderId" ColumnName="ClientOrderId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
